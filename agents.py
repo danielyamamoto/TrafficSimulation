@@ -35,7 +35,7 @@ class Vehicle(Agent):
         self.ori_y = ori[1]
 
     def boundaries(self, pos):
-        return pos[0] > 0 and pos[0] < self.model.size and pos[1] > 0 and pos[1] < self.model.size
+        return pos[0] > 0 and pos[0] < self.model.size - 1 and pos[1] > 0 and pos[1] < self.model.size - 1
 
     def step(self):
         self.move()
@@ -48,9 +48,11 @@ class Vehicle(Agent):
         trafficlights = [obj for obj in other_agents if isinstance(obj, TrafficLight)]
         # Check if there are any vehicles
         vehicles = [obj for obj in other_agents if isinstance(obj, Vehicle)]
-
-        if len(vehicles) == 0 and self.boundaries(new_pos) == True and len(trafficlights) == 0:
+        
+        if len(vehicles) == 0 and len(trafficlights) == 0 and self.boundaries(new_pos) == True:
             self.model.grid.move_agent(self, new_pos)
+        elif len(vehicles) != 0:
+            return
         elif len(trafficlights) != 0:
             if trafficlights[0].state == "#FF0000":
                 return
@@ -63,7 +65,7 @@ class Vehicle(Agent):
                 if self.ori_x != new_dir[rand][0] and self.ori_y != new_dir[rand][1]:
                     self.ori_x = new_dir[rand][0]
                     self.ori_y = new_dir[rand][1]
-                    self.model.grid.move_agent(self, new_dir[rand][2], new_dir[rand][3])
+                    self.model.grid.move_agent(self, (new_dir[rand][2], new_dir[rand][3]))
         else:
             self.model.grid._remove_agent(self.pos, self)
             self.model.schedule.remove(self)
