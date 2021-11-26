@@ -49,6 +49,13 @@ class StreetModel(Model):
     def step(self):
         self.datacollector.collect(self)
         self.schedule.step()
+        ps = []
+        for i in range(self.num_vehicles):
+            xy = self.schedule.agents[i].pos
+            p = [xy[0], xy[1], 0]
+            ps.append(p)
+        print(ps)
+        return ps
 
     def run_model(self, step=200):
         for i in range(step):
