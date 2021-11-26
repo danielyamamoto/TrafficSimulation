@@ -1,5 +1,5 @@
 from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.modules import CanvasGrid, ChartModule
+from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.UserParam import UserSettableParameter
 
 from agents import TrafficLight, Vehicle
@@ -13,14 +13,14 @@ def StreetModel_portrayal(agent):
 
     if type(agent) is TrafficLight:
         portrayal["Layer"] = 1
-        portrayal["Color"] = ["#00FF00", "#FCF4A3", "#FF0000"] # G, Y, R
+        portrayal["Color"] = agent.state
         portrayal["Shape"] = "rect"
         portrayal["Filled"] = "true"
         portrayal["w"] = 1
         portrayal["h"] = 1
     elif type(agent) is Vehicle:
         portrayal["Layer"] = 1
-        portrayal["Color"] = ["#FAFAFA", "#69C7B7", "#3D81C2"]
+        portrayal["Color"] = ["#69C7B7"]
         portrayal["Shape"] = "rect"
         portrayal["Filled"] = "true"
         portrayal["w"] = 1
@@ -28,17 +28,13 @@ def StreetModel_portrayal(agent):
 
     return portrayal
 
-canvas_element = CanvasGrid(StreetModel_portrayal, 30, 30, 600, 600)
-chart_element = ChartModule(
-    [{"Label": "Wolves", "Color": "#AA0000"}, {"Label": "Sheep", "Color": "#666666"}]
-)
+canvas_element = CanvasGrid(StreetModel_portrayal, 20, 20, 600, 600)
 
 model_params = {
-
+    "nVehicles": UserSettableParameter("slider", "Number of vehicles", 5, 1, 10)
 }
 
 server = ModularServer(
-    #StreetModel, [canvas_element, chart_element], "Traffic Simulation", model_params
     StreetModel, [canvas_element], "Traffic Simulation", model_params
 )
 server.port = 8521

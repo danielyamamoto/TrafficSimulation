@@ -1,16 +1,16 @@
 from mesa import Model
-from mesa.space import SingleGrid
+from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 
 from agents import TrafficLight, Vehicle
 from schedule import RandomActivationByType
 
 class StreetModel(Model):
-    def __init__(self, nVehicles = 4, nLights = 2, size = 20):
+    def __init__(self, nVehicles = 4, nLights = 4, size = 20):
         super().__init__()
         self.num_vehicles = nVehicles
         self.num_lights = nLights
-        self.grid = SingleGrid(size, size, False)
+        self.grid = MultiGrid(size, size, False)
         self.schedule = RandomActivationByType(self)
 
         self.datacollector = DataCollector(
@@ -28,11 +28,14 @@ class StreetModel(Model):
             self.grid.place_agent(v, (x, y))
             self.schedule.add(v)
 
+        pos_lig = [[8,9],[9,11],[10,8],[11,10]]
+        count = 0
         # Create TrafficLights
         for i in range(self.num_vehicles, self.num_vehicles + self.num_lights):
-            x = self.random.randrange(20)
-            y = self.random.randrange(20)
+            x = pos_lig[count][0]
+            y = pos_lig[count][1]
             t = TrafficLight(i, (x, y),self)
+            count += 1
             self.grid.place_agent(t, (x, y))
             self.schedule.add(t)
 
