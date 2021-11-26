@@ -6,25 +6,41 @@ class TrafficLight(Agent):
         super().__init__(unique_id, model)
         self.pos_x = pos[0]
         self.pox_y = pos[1]
-        self.state = self.getColor()
+        self.state = "#FFFF00"
+        self.is_near = False
+        self.is_color_selected = False
         self.timer = 10
     
     def change(self):
+        if self.is_near:
+            if self.is_color_selected:
+                self.chanceColor()
+            else:
+                self.state = self.getColor()
+        else:
+            possible_steps = self.model.grid.get_neighborhood(self.pos, moore = False, include_center = False)
+            for step in possible_steps:
+                other = self.model.grid.get_cell_list_contents(step)
+                if len(other) >= 1:
+                    self.is_near = True
+                    break
+
+    def step(self):
+        self.timer = self.timer - 1
+        self.change()
+
+    def getColor(self):
+        colors = ["#00FF00", "#FFFF00", "#FF0000"] # G, Y, R
+        self.is_color_selected = True
+        return random.choice(colors)
+
+    def chanceColor(self):
         if self.state == "#00FF00":
             self.state = "#FFFF00"
         elif self.state == "#FFFF00":
             self.state = "#FF0000"
         else:
             self.state = "#00FF00"
-    
-    def step(self):
-        print("I'm a traffic light " + str(self.unique_id))
-        self.timer = self.timer - 1
-        self.change()
-
-    def getColor(self):
-        colors = ["#00FF00", "#FFFF00", "#FF0000"] # G, Y, R
-        return random.choice(colors)
 
 class Vehicle(Agent):
     def __init__(self, unique_id, pos, ori, model):
