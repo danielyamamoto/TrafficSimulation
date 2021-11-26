@@ -45,9 +45,8 @@ class StreetModel(Model):
             self.grid.place_agent(t, (x, y))
             self.schedule.add(t)
 
-    def step(self):
     # Advances the model by one step
-        print("Step")
+    def step(self):
         self.datacollector.collect(self)
         self.schedule.step()
 

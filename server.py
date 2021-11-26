@@ -31,7 +31,7 @@ def StreetModel_portrayal(agent):
 canvas_element = CanvasGrid(StreetModel_portrayal, 20, 20, 600, 600)
 
 model_params = {
-    "nVehicles": UserSettableParameter("slider", "Number of vehicles", 5, 1, 10)
+    "nVehicles": UserSettableParameter("slider", "Number of vehicles", 2, 1, 10)
 }
 
 server = ModularServer(
