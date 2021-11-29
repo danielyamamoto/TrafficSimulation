@@ -6,13 +6,14 @@ from agents import TrafficLight, Vehicle
 from schedule import RandomActivationByType
 
 class StreetModel(Model):
-    def __init__(self, nVehicles = 4, nLights = 4, nSize = 20):
+    def __init__(self, nVehicles = 8, nLights = 4, nSize = 20):
         super().__init__()
         self.num_vehicles = nVehicles
         self.num_lights = nLights
         self.size = nSize
         self.grid = MultiGrid(nSize, nSize, False)
         self.schedule = RandomActivationByType(self)
+        self.counter = 0
 
         self.datacollector = DataCollector(
             {
@@ -22,6 +23,12 @@ class StreetModel(Model):
         )
         
         origin_pos = [[10,0],[0,9],[9,19],[19,10]]
+        self.next_to_origin = {
+            (10,0): [0,1,10,1],
+            (0,9): [1,0,1,9],
+            (9,19): [0,-1,9,18],
+            (19,10): [-1,0,18,10]
+        }
         orient = [[0,1],[1,0],[0,-1],[-1,0]]
         # Create Vehicles
         for i in range(self.num_vehicles):
@@ -47,6 +54,7 @@ class StreetModel(Model):
 
     # Advances the model by one step
     def step(self):
+        self.counter += 1
         self.datacollector.collect(self)
         self.schedule.step()
         ps = []
@@ -58,4 +66,4 @@ class StreetModel(Model):
 
     def run_model(self, step=20):
         for i in range(step):
-            print(self.step())
+            self.step()
