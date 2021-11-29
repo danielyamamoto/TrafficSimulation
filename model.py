@@ -52,11 +52,10 @@ class StreetModel(Model):
         ps = []
         for i in range(self.num_vehicles):
             xy = self.schedule.agents[i].pos
-            p = [xy[0], 0, xy[1]]
+            p = [xy[0], xy[1], 0]
             ps.append(p)
-        print(ps)
         return ps
 
-    def run_model(self, step=200):
+    def run_model(self, step=20):
         for i in range(step):
-            self.step()
+            print(self.step())
