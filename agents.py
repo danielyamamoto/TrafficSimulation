@@ -83,6 +83,7 @@ class Vehicle(Agent):
                     self.ori_y = new_dir[rand][1]
                     self.model.grid.move_agent(self, (new_dir[rand][2], new_dir[rand][3]))
         else:
+            self.model.num_vehicles -= 1
             self.model.grid._remove_agent(self.pos, self)
             self.model.schedule.remove(self)
 

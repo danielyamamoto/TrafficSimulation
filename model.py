@@ -52,7 +52,7 @@ class StreetModel(Model):
         ps = []
         for i in range(self.num_vehicles):
             xy = self.schedule.agents[i].pos
-            p = [xy[0], xy[1], 0]
+            p = [xy[0], 0, xy[1]]
             ps.append(p)
         print(ps)
         return ps
