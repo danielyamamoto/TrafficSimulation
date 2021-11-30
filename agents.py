@@ -27,13 +27,11 @@ class TrafficLight(Agent):
 
     def step(self):
         self.timer = self.timer - 1
-        if self.timer == 0:
+        if self.timer == 8 and self.timer > 0 and self.state == "#00FF00":
+            self.state = "#FFFF00"
+        elif self.timer == 0:
             self.state = self.change()
 
-    def getColor(self):
-        colors = ["#00FF00", "#FFFF00", "#FF0000"] # G, Y, R
-        self.is_color_selected = True
-        return random.choice(colors)
 class Vehicle(Agent):
     def __init__(self, unique_id, pos, ori, model):
         super().__init__(unique_id, model)
